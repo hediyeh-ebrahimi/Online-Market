@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>مدیریت محصولات</title>
+    <div th:include="/header :: header"></div>
+</head>
+<body style="direction: rtl;">
+<div th:include="navBar:: navbar"></div>
+
+<div style="margin: 2rem 2rem 3rem;">
+    <form th:action="@{/addProduct}" th:method="post" th:object="${product}" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col">
+                <label for="title">عنوان </label>
+                <input type="text" class="form-control" id="title" th:field="*{title}" th:name="title">
+            </div>
+            <div class="col">
+                <label for="imageFile">تصویر </label>
+                <input type="file" class="form-control" id="imageFile" th:name="imageFile">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label for="price">قیمت </label>
+                <input type="text" class="form-control" id="price" th:field="*{price}" th:name="price">
+            </div>
+            <div class="col">
+                <label for="priceByDiscount">قیمت با تخفیف </label>
+                <input type="text" class="form-control" id="priceByDiscount" th:field="*{priceByDisCount}">
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label for="cnt">تعداد</label>
+                <input type="text" class="form-control" id="cnt" th:field="*{cnt}" th:name="cnt">
+            </div>
+
+            <div class="col">
+            </div>
+
+        </div>
+
+        <div>
+            <input type="submit" value="ثبت" class="btn btn-success" style="margin: 2rem 34rem;width: 9%;"/>
+        </div>
+
+    </form>
+
+</div>
+
+
+<div class="container">
+    <table class="table table-bordered" style="text-align: center !important;vertical-align: middle;">
+        <thead class="thead-light">
+        <tr >
+            <th scope="col" style="text-align: center !important;vertical-align: middle;">#</th>
+            <th scope="col" style="text-align: center !important;vertical-align: middle;">عنوان</th>
+            <th scope="col" style="text-align: center !important;vertical-align: middle;">قیمت</th>
+            <th scope="col" style="text-align: center !important;vertical-align: middle;">قیمت با تخفیف</th>
+            <th scope="col" style="text-align: center !important;vertical-align: middle;">تعداد</th>
+            <th scope="col" style="text-align: center !important;vertical-align: middle;">تصویر</th>
+        </tr>
+        </thead>
+        <!--    <tbody>-->
+        <tr th:each="product : ${productList}">
+            <td th:text="${product.productId}"></td>
+            <td th:text="${product.title}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.priceByDisCount}"></td>
+            <td th:text="${product.cnt}"></td>
+            <td>
+                <img th:if="${product.imageAddress != null}" th:src="${'/image/product-images/'+product.imageAddress}" th:width="50" th:height="50"/>
+                <img th:unless="${product.imageAddress != null}" th:src="${'/image/product-images/no.png'}" th:width="50" th:height="50"/>
+            </td>
+            <td>
+                <button class="btn btn-primary" th:onclick="setProductId([[${product.productId}]])"
+                >گالری
+                </button>
+                <th:block th:include="admin/gallery :: modal(${product.productId},${product.imageList})"
+                          th:id="modal+${product.productId}"></th:block>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<script>
+
+    function setProductId(productId) {
+        $('.gallery_modal' + productId + ' #gallery' + productId).modal();
+    }
+
+    function addUploadRow() {
+        var count = parseInt($("#count").val());
+        //var id = $('.image-div').last().attr('id');
+        alert(count);
+        if(count < 5){
+            var data = "<tr>\n" +
+                "                            <td>انتخاب فایل</td>\n" +
+                "                            <td><input type=\"file\" name=\"file\"/> \n";
+
+            if (count < 4) {
+                data += "<a onclick='addUploadRow()'>+</a>";
+
+            }
+
+            data += "</td></tr>";
+            $(".uploadTable").append(data);
+            $("#count").val(count + 1);
+        }
+
+    }
+
+    function deleteImage(address,imageId){
+        // alert(address+"------------"+imageId);
+        // var deleteFiles = $("#deleteFiles").value();
+        // alert(deleteFiles);
+        // $("#deleteFiles").text(deleteFiles+"/"+address);
+        // $("#image"+imageId).
+    }
+
+    function deleteImage(imageAddress,productId,index) {
+        alert(index);
+        $.ajax({
+            url: "/deleteImage/"+imageAddress+"/" + productId,
+            success: function(response) {
+                $("#image"+index).remove();
+                var count = $("#count").val();
+                $("#count").val(count - 1);
+                // $('#viewUserHolder').html(response);
+                // $('#viewUser').modal();
+                // $('#viewUser').modal('open');
+            }
+        });
+    }
+
+</script>
+
+
+</body>t
+</html>

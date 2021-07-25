@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>سفارشات</title>
+    <div th:include="/header :: header"></div>
+
+</head>
+<body style="direction: rtl;">
+    <div th:include="navBar:: navbar"></div>
+
+    <div class="container">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">شناسه سفارش</th>
+            <th scope="col">نام و نام خانوادگی</th>
+            <th scope="col">حصول</th>
+            <th scope="col">تعداد</th>
+            <th scope="col">مبلغ کل</th>
+            <th scope="col">وضعیت</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${orderItems}">
+            <th scope="row"></th>
+            <td th:text="${item.order.orderId}"></td>
+            <td th:text="${item.order.firstName+' '+item.order.lastName}"></td>
+            <td th:text="${item.product.title}"></td>
+            <td th:text="${item.cnt}"></td>
+            <td th:text="${item.price}"></td>
+            <!--            <td th:text=""></td>-->
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+</body>
+</html>

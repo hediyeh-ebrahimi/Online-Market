@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>لیست محصولات</title>
+    <div th:include="/header :: header"></div>
+
+</head>
+<body dir="rtl">
+<div th:include="navBar:: navbar"></div>
+<div>
+    <div class="search">
+        <div class="container">
+            <ul class="nav nav-pills">
+                <li class="active"><a data-toggle="pill" href="#search">جست و جو</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="search" class="tab-pane active">
+                    <form th:method="post" th:action="@{/product/search}" th:object="${productSearch}">
+                        <div class="form-group">
+                            <label for="category">دسته بندی </label>
+                            <input type="text" class="form-control" id="category" th:field="*{categoryTitle}">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">عنوان </label>
+                            <input type="text" class="form-control" id="title" th:field="*{title}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="minPriceValue">حداقل قیمت </label>
+                            <input type="text" class="form-control" id="minPriceValue" th:field="*{minPriceValue}">
+                            <label for="maxPriceValue">حداکثر قیمت </label>
+                            <input type="text" class="form-control" id="maxPriceValue" th:field="*{maxPriceValue}">
+                        </div>
+
+
+                        <div class="form-group form-check">
+                            <label style="padding: 0.7rem;">
+                                <input type="checkbox" class="form-check-input" id="mostSold" th:value="1"
+                                       th:field="*{mostSold}">
+                            </label>
+                            <label class="form-check-label" for="mostSold">پرفروش ترین ها </label>
+
+                            <label style="padding: 0.7rem;">
+                                <input type="checkbox" class="form-check-input" id="newestProduct" th:value="1"
+                                       th:field="*{newestProduct}">
+                            </label>
+                            <label class="form-check-label" for="newestProduct">جدیدترین محصولات</label>
+
+                            <label style="padding: 0.7rem;">
+                                <input type="checkbox" class="form-check-input" id="favouriteProduct"
+                                       th:field="*{favouriteProduct}" th:value="1">
+                            </label>
+                            <label class="form-check-label" for="favouriteProduct">محبوب ترین محصولات</label>
+
+                            <label style="padding: 0.7rem;">
+                                <input type="checkbox" class="form-check-input" id="highestPrice" th:value="1"
+                                       th:field="*{highestPrice}">
+                            </label>
+                            <label class="form-check-label" for="highestPrice">گران ترین</label>
+
+                            <label style="padding: 0.7rem;">
+                                <input type="checkbox" class="form-check-input" id="lowestPrice"
+                                       th:field="*{lowestPrice}"
+                                       th:value="1">
+                            </label>
+                            <label class="form-check-label" for="lowestPrice">ارزان ترین</label>
+                        </div>
+                        <div style="margin: 4% 50%;">
+                            <button type="submit" class="btn btn-primary">جست و جو</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <h4>محصولات</h4>
+    <div class="container">
+        <div class="row">
+            <div th:each="product:${products}" class="col-md-4" style="">
+                <!--            card-->
+                <!--            card-img-top-->
+                <div class="card-body">
+                    <img th:if="${product.imageAddress != null}" th:src="${'/image/product-images/'+product.imageAddress}" class=""
+                         style="width: 100%;height: 150px;">
+                    <img th:unless="${product.imageAddress != null}" th:src="${'/image/product-images/no.png'}" class=""
+                         style="width: 100%;height: 150px;">
+                    <h5 class="card-title" th:text="${product.title}" style="margin-top: 12px;"></h5>
+                    <form th:action="@{/addToCart}" th:method="post" th:object="${item}">
+                        <label for="cnt">تعداد</label>
+                        <input type="number" th:name="cnt" placeholder="" style="width: 85px;margin-left: 19px;"
+                               id="cnt" min="1">
+                        <input type="hidden" th:name="productId" th:value="${product.productId}">
+                        <button type="submit" class="btn btn-primary" style="position: absolute;">افزودن به سبد خرید
+                        </button>
+                    </form>
+                    <a th:href="@{'/productDetail/'+${product.productId}}" class="btn btn-danger" style="width: 100%;margin-top: 14px;">جزییات</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

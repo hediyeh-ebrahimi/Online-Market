@@ -17,7 +17,6 @@ target/
 *.iws
 *.iml
 *.ipr
-src/main/java/ir/eshragh/planning/modules/common/controller/rest/TestController.java
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
